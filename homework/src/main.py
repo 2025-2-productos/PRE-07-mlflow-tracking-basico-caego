@@ -1,4 +1,5 @@
 # se importa mlflow para el tracking de experimentos y uuid para generar identificadores únicos
+import os
 import uuid
 
 import mlflow
@@ -17,6 +18,10 @@ RANDOM_STATE = 123456
 
 def main():
 
+    # Configurar MLflow para usar ruta relativa
+    # tracking_uri = os.path.join(os.getcwd(), "mlruns")
+    # mlflow.set_tracking_uri(f"file://{tracking_uri}")
+
     args = parse_argument()
     model = select_model(args)
 
@@ -26,6 +31,8 @@ def main():
         random_state=RANDOM_STATE,
     )
 
+    mlflow.set_tracking_uri("file:mlruns")
+    mlflow.set_experiment("wine_quality_experiment")
     # se inicia un experimento en MLflow
     mlflow.set_experiment("wine_quality_experiment")
     run_name = f"{args.model}_{uuid.uuid4().hex[:8]}"
